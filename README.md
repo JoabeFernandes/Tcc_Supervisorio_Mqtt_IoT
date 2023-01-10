@@ -1,7 +1,7 @@
 # Tcc_Supervisorio_Mqtt_IoT
 Projeto de um supervisório utilizando a placa ESP-8266 em internet das coisas. Com base no protocolo Mqtt de comunicação M2M
 
-Projeto Piloto carente de melhoria. Open source!
+Projeto Piloto. Livre para melhorias. Open source!
 
 Resultado das tela !
 
