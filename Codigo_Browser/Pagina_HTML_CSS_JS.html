@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supervisório IoT</title>
+
+    <style>
+
+        #visor {
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+            font-size: 11px;
+            color: black;
+            margin: 5px;
+            background-color: white;
+            background-size: cover;
+          
+        }
+
+        .cabecalho {
+            height: 20px;
+            margin: 5px 5px 5px 5px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            background-color: #404040;
+            border: #000000 solid 3px;
+            color: white;
+            font-size: 11px;
+            font-weight: 700
+        }
+
+        .rodape {
+            height: 20px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            text-align: end;
+            background-color: #404040;
+            border: #000000 solid 3px;
+            color: white;
+            font-size: 11px;
+            font-weight: 700
+        }
+
+        .linhasensor {
+            text-align: center;
+            margin: 5px;
+            display: flex;
+            background-color: white;
+            justify-content: space-around;
+        }
+
+        .Gauss {
+            border-radius: 10px;
+            background: #666666;
+            display: flex;
+            background-color: #404040d3;
+            justify-content: center;
+            border: #000000 solid 3px;
+            
+        }
+
+        .Grafico {
+            border-radius: 10px;
+            
+            display: flex;
+            background-color: #404040d3;
+            width: 100%;
+            padding: 15px;
+            margin-left: 10px;
+            border: #000000 solid 3px;
+        }
+
+        .botoessetpoint {
+            margin-left: 15px;
+            margin-top: 45px;
+            width: 50px;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .button {
+            
+            background-color: #dc3912cd;
+            border-radius: 10px;
+            border: 4px double #cccccc;
+            color: #eeeeee;
+            font-size: 28px;
+            width: 200px;
+            transition: all 1s;
+            cursor: pointer;
+            margin: 5px;
+            justify-content:center;
+        }
+
+        .btn {
+            background-color: black;
+            border-radius: 20px;
+            color: #fff;
+            font-size: 15px;
+            cursor: pointer;
+            margin-left: auto;
+            margin-right: 50px;
+            margin-bottom: 2px;
+            text-align: center;
+            border: #000000 solid 2px;
+            font-size: 13px;
+        }
+
+        .botoescomando {
+            margin-bottom: 2px;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+          
+        }
+
+
+        button span {
+            cursor: pointer;
+            display: inline-block;
+            position: relative;
+            transition: 0.5s;
+        }
+
+            button span:after {
+                content: '\00bb';
+                position: absolute;
+                opacity: 0;
+                top: 0;
+                right: -20px;
+                transition: 0.5s;
+            }
+
+        button:hover {
+            background-color: #f7c2f9;
+        }
+
+            button:hover span {
+                padding-right: 25px;
+            }
+
+                button:hover span:after {
+                    opacity: 1;
+                    right: 0;
+                }
+
+        .modal-container {
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #0000004b;
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+            display: none;
+        }
+
+        .modal {
+            width: 30%;
+            min-width: 100px;
+            min-height: 100px;
+            background-color:#b24a4abc;            
+            backdrop-filter: blur(10px);
+            padding: 50px;
+            border-radius: 10px;
+            
+        }
+
+        .fechar {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background-color: green;
+            color: #fff;
+            font-weight: 700;
+            font-size: 14pt;
+            cursor: pointer;
+        }
+
+        .modal h1 {
+            margin-bottom: 20px;
+        }
+
+        @keyframes animate-modal {
+            from {
+                opacity: 0;
+                transform: translate3d(0, -20px, 0);
+            }
+
+            to {
+                opacity:1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .modal-container.mostrar {
+            display: flex;
+        }
+
+        .mostrar .modal {
+            animation: animate-modal .3s;
+        }
+
+
+
+
+      
+
+
+            .btn:hover {
+                background-color: #ff4c2c;
+            }
+
+
+        .modal-Historico {
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #282626;
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+            display: none;
+        }
+
+        .Historico {
+            width: 100%;
+            height: 75%;
+            margin-right: 30px;
+            margin-left: 20px;
+            min-width: 100px;
+            min-height: 100px;
+            background-color: #404040d3;
+            backdrop-filter: blur(10px);
+            padding: 50px;
+            border-radius: 10px;
+          
+        }
+
+        
+
+        .Historico h1 {
+            margin-bottom: 20px;
+        }
+
+        @keyframes animate-Historico {
+            from {
+                opacity: 0;
+                transform: translate3d(0, -20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .modal-Historico.mostrarB {
+            display: flex;
+        }
+
+        .mostrarB .Historico {
+            animation: animate-Historico .3s;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+
+    <script>
+        /***************************************************
+         * Cliente MQTT
+         */
+
+        // Variáveis para cliente MQTT
+        var mqtt;
+        var reconnectTimeout = 2000;
+        var host = "test.mosquitto.org";
+        var port = 8080;
+
+        var mediatemp = null;
+        var mediaUmi = null;
+        var ValorHistorico = null;
+        var Historicotemp = null;
+        var HistoricoUmi = null;
+        var HistoricoSPT = null;
+        var HistoricoSPU = null;
+      
+
+        function MQTTConnect() {
+            // Conecta no Broker
+            console.log("Conectando " + host + " " + port);
+            mqtt = new Paho.MQTT.Client(host, port, "IeCJSClient");
+            var options = {
+                timeout: 10,
+                keepAliveInterval: 10,
+                onSuccess: onConnect,
+                onFailure: onError
+            };
+            mqtt.onMessageArrived = onMessageArrived;
+            mqtt.onConnectionLost = onError;
+            mqtt.connect(options);
+
+        }
+
+        function onError(message) {
+            // Ocorrencia de erro
+            console.log("Falha: " + message.errorCode + " " + message.errorMessage);
+            setTimeout(MQTTConnect, reconnectTimeout);
+
+        }
+
+        function onConnect() {
+            // Conexao ao Broker
+            console.log("Conectado");
+            mqtt.subscribe("Sensor/TEMPERATURA");
+            mqtt.subscribe("mediaTemp");
+            mqtt.subscribe("Sensor/UMIDADE");
+            mqtt.subscribe("mediaUmi");
+            mqtt.subscribe("BCIBotao1");
+            mqtt.subscribe("Historico");
+            mqtt.subscribe("RecebeSetpoints");
+            mqtt.subscribe("internetecoisas/example/integer");
+            subscribeISO8601();
+            solicitaSetpoints();
+
+        }
+
+        function subscribeISO8601() {
+            // Assina Tópico datetime/ISO-8601
+            mqtt.subscribe("datetime/ISO-8601");
+        }
+        function solicitaSetpoints() {
+
+            message = new Paho.MQTT.Message("1");
+            message.destinationName = "solicitaSetpoints";
+            mqtt.send(message);
+            
+
+        }
+
+        function onMessageArrived(msg) {
+            // Mensagem recebida
+
+            var A = document.getElementById("atividade");
+            A.style.background = "rgb(170, 236, 83)";
+            var B = document.getElementById("atividade2");
+            B.style.background = "rgb(0, 0, 0)";
+       
+         
+
+
+            console.log("Mensagem: " + msg.destinationName + "=" + msg.payloadString);
+
+
+            if (msg.destinationName == "RecebeSetpoints") {
+
+                var Setpoints = msg.payloadString;
+
+                setpointTemp = parseFloat(Setpoints.substr(0, 2));
+                setpointUmi = parseFloat(Setpoints.substr(3, 4));
+
+                //mqtt.unsubscribe("RecebeSetpoints");
+            }
+
+
+
+            if (msg.destinationName == "datetime/ISO-8601") {
+                // Tópico ISO-8601
+                mqtt.unsubscribe("datetime/ISO-8601");
+                var t = new Date(msg.payloadString);
+                document.getElementById("time").innerText = "ISO-8601: " + t.toLocaleDateString() + " " + t.toLocaleTimeString();
+                setTimeout(subscribeISO8601, 60000);
+              
+            }
+
+            if (msg.destinationName == "Sensor/TEMPERATURA") {
+                // ====>>> Temperatura
+                dataTemp.setValue(0, 1, msg.payloadString);
+                chartTemp.draw(dataTemp, optionsTemp);
+
+                A.style.background = "rgb(0, 0, 0)";
+              
+               
+
+
+            }
+
+
+            if (msg.destinationName == "mediaTemp") {
+                // Tópico Temperatura
+
+                mediatemp = parseFloat(msg.payloadString);
+
+                
+            }
+
+            if (mediatemp) {
+                // ====>>>Temperatura
+
+                console.log('Inserir linha');
+                dataGrafTemp.addRows([[new Date(),
+                    mediatemp,
+                    setpointTemp
+
+                ]]);
+
+              
+              
+
+                if (dataGrafTemp.getNumberOfRows() > 20) {
+                    // Excluir linha de dados
+                    console.log('Excluir linha');
+                    dataGrafTemp.removeRow(0);
+                }
+                if (mediatemp > setpointTemp) {
+
+                   
+                    openModal()
+
+
+                }
+
+
+                chartGraftemp.draw(dataGrafTemp, optionsGrafTemp);
+                mediatemp = null;
+
+            }
+
+
+
+
+            if (msg.destinationName == "Sensor/UMIDADE") {
+                // ====>>> Umidade
+
+                dataUmi.setValue(0, 1, msg.payloadString);
+
+                chartUmi.draw(dataUmi, optionsUmi);
+
+                B.style.background = "rgb(170, 236, 83)";
+               
+
+            }
+
+
+            if (msg.destinationName == "mediaUmi") {
+                // Tópico Umidade
+
+                mediaUmi = parseFloat(msg.payloadString);
+
+            }
+
+
+            if (mediaUmi) {
+                // ====>>> Umidade
+
+                console.log('Inserir linha');
+                dataGrafUmi.addRows([[new Date(),
+                    mediaUmi,
+                    setpointUmi
+
+                ]]);
+
+                if (dataGrafUmi.getNumberOfRows() > 20) {
+                    // Excluir linha de dados
+                    console.log('Excluir linha');
+                    dataGrafUmi.removeRow(0);
+                }
+
+                if (mediaUmi > setpointUmi) {
+                                       
+                    openModal()
+
+                }
+
+                chartGrafUmi.draw(dataGrafUmi, optionsGrafUmi);
+                mediaUmi = null;
+
+            }
+
+            if (msg.destinationName == "BCIBotao1") {
+                // Toggle
+                var t = document.getElementById("toggle");
+                if (msg.payloadString == 0) {
+                    t.innerText = "Status: Ligado";
+                    t.style.background = "rgb(170, 236, 83)";
+                } else {
+                    t.innerText = "Status: Desligado";
+                    t.style.background = "rgb(227, 0, 14)";
+                }
+                
+            }
+
+            if (msg.destinationName == "Historico") {
+
+
+                ValorHistorico = msg.payloadString;
+              
+                Historicotemp = parseFloat(ValorHistorico.substr(0, 2));
+                HistoricoUmi = parseFloat(ValorHistorico.substr(3, 5));
+                HistoricoSPT = parseFloat(ValorHistorico.substr(6, 8));
+                HistoricoSPU = parseFloat(ValorHistorico.substr(9, 11));
+
+
+            }
+
+
+            if (ValorHistorico) {
+
+
+
+
+
+                    console.log('Inserir linha');
+                    dataGrafMedia.addRows([[new Date(),
+                        Historicotemp,
+                        HistoricoUmi,
+                        HistoricoSPT,
+                        HistoricoSPU
+
+                    ]]);
+
+                    chartGrafMedia.draw(dataGrafMedia, optionsGrafMedia);
+                    ValorHistorico = null;
+
+               
+
+              
+            }
+
+            
+
+        }
+
+
+
+        function enviapacote() {
+            // FUNCO A SER IMPLENTADA POSTERIORMENTE_ ENVIA DADOS PRO BROKER
+
+            message = new Paho.MQTT.Message("1");
+            message.destinationName = "BCIBotao1";
+            mqtt.send(message);
+        }
+        function enviapacoteB() {
+
+            message = new Paho.MQTT.Message("0");
+            message.destinationName = "BCIBotao1";
+            mqtt.send(message);
+            // FUNCO A SER IMPLENTADA POSTERIORMENTE_ ENVIA DADOS PRO BROKER
+
+
+
+
+        }   
+
+        function EventoTempsubir() {
+
+           
+
+            setpointTemp = (setpointTemp + 1 );
+            var msg = setpointTemp + "";
+            message = new Paho.MQTT.Message(msg);
+            message.destinationName = "Send_SetPoint_Temp";
+            mqtt.send(message);
+            delay(100);
+            
+
+        }
+
+        function EventoTempdescer() { 
+            setpointTemp = (setpointTemp - 1);
+           
+            var msg = setpointTemp + "";
+            message = new Paho.MQTT.Message(msg);
+            message.destinationName = "Send_SetPoint_Temp";
+            mqtt.send(message);
+
+        }
+
+        function EventoUmisubir() {
+
+            setpointUmi = setpointUmi + 1;
+            var msg = setpointUmi + "";
+            message = new Paho.MQTT.Message(msg);
+            message.destinationName = "Send_SetPoint_Umi";
+            mqtt.send(message);
+
+        }
+        function EventoUmidescer() {
+
+            setpointUmi = setpointUmi - 1;
+            var msg = setpointUmi + "";
+            message = new Paho.MQTT.Message(msg);
+            message.destinationName = "Send_SetPoint_Umi";
+            mqtt.send(message);
+
+        }
+
+
+        function openModal() {
+            const modal = document.getElementById('modal-container')
+            modal.classList.add('mostrar')
+
+            modal.addEventListener('click', (e) => {
+                if (e.target.id == 'modal-container' || e.target.id == "fechar") {
+                    modal.classList.remove('mostrar')
+                    localStorage.fechaModal = 'modal-container'
+                }
+            })
+        }
+
+        function Historico() {
+
+            const Historico = document.getElementById('modal-Historico')
+            Historico.classList.add('mostrarB');
+            drawGrafMedia();
+
+            Historico.addEventListener('click', (e) => {
+
+                if (e.target.id == 'modal-Historico' || e.target.id == "fecharB") {
+
+                    Historico.classList.remove('mostrarB')
+                    localStorage.fechaModal = 'modal-Historico'
+
+
+                    message = new Paho.MQTT.Message("F");
+                    message.destinationName = "Historico";
+                    mqtt.send(message);
+
+
+                }
+            })
+
+            message = new Paho.MQTT.Message("H");
+            message.destinationName = "Historico";
+            mqtt.send(message);
+
+        }
+
+
+
+
+
+
+
+
+        /***************************************************
+         * Gráficos
+         */
+
+        // Instancias dos gráficos
+        google.charts.load('current', { 'packages': ['gauge'], 'language': 'pt-br', 'mapsApiKey': 'AIzaSyBWF8UvD9TyJSKsSCKP3PtHisRPbG4zuRA' });
+        google.charts.setOnLoadCallback(drawTemp);
+        google.charts.setOnLoadCallback(drawUmi);
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawGrafTemp);
+        google.charts.setOnLoadCallback(drawGrafUmi);
+        google.charts.setOnLoadCallback(drawGrafMedia);
+        
+
+
+        // Variáveis para gráficos
+        var chartTemp;
+        var dataTemp;
+        var optionsTemp;
+
+        var chartUmi;
+        var dataUmi;
+        var optionsUmi;
+
+        var dataGrafTemp;
+        var optionsGrafTemp;
+        var chartGraftemp;
+
+        var chartGrafUmi;
+        var dataGrafUmi;
+        var optionsGrafUmi;
+
+        var chartGrafMedia;
+        var dataGrafMedia;
+        var optionsGrafMedia;
+
+        var setpointTemp = null;
+        var setpointUmi = null;
+
+        function drawTemp() {
+            // Desenha Temperatura
+            dataTemp = google.visualization.arrayToDataTable([
+                ['Label', 'Value'],
+                ['Temp°C', 0]
+            ]);
+            optionsTemp = {
+                min: 0, max: 80,
+                majorTicks: ["0", "10", "20", "30", "40", "50", "60", "70"],
+                minorTicks: 2,
+                greenFrom: 0, greenTo: 30,
+                yellowFrom: 30, yellowTo: 60,
+                redFrom: 60, redTo: 80
+            };
+            chartTemp = new google.visualization.Gauge(document.getElementById('temp'));
+            chartTemp.draw(dataTemp, optionsTemp);
+        }
+
+        function drawUmi() {
+            // Desenha Umidade
+            dataUmi = google.visualization.arrayToDataTable([
+                ['Label', 'Value'],
+                ['Umid. %', 100]
+            ]);
+            optionsUmi = {
+                min: 0, max: 100,
+                majorTicks: ["0", "10", "20", "30", "40", "50", "60", "70", "80", "90", "100"],
+                minorTicks: 2,
+                redFrom: 0, redTo: 30,
+                yellowFrom: 80, yellowTo: 100
+            };
+            chartUmi = new google.visualization.Gauge(document.getElementById('umi'));
+            chartUmi.draw(dataUmi, optionsUmi);
+        }
+
+
+
+
+
+        function drawGrafTemp() {
+            // Desenha Gráfico de Linhas
+            dataGrafTemp = new google.visualization.DataTable();
+            dataGrafTemp.addColumn('datetime', 'Hora');
+            dataGrafTemp.addColumn('number', 'VP');
+            dataGrafTemp.addColumn('number', 'SP');
+
+            optionsGrafTemp = {
+                title: 'Temperatura em tempo real',
+                pointSize: 2,
+                is3D: true,
+                legend: {
+                    position: 'rigth'
+                },
+
+                curveType: 'function',
+                hAxis: {
+                    title: 'Horário',
+                    format: 'HH:mm:ss',
+                    gridlines: {
+                        count: 5
+                    }
+                },
+                vAxis: {
+                    title: 'Temperatura',
+                    format: 'long',
+                    gridlines: {
+                        count: 7
+                    },
+                    viewWindow: {
+                        min: 0,
+                        max: 90
+                    }
+
+                }
+
+               
+
+
+               
+            };
+           // dataGrafTemp.addRows([[new Date(),
+            //    0,
+            //    0
+            //]]);
+
+            chartGraftemp = new google.visualization.LineChart(document.getElementById('GrafTemp'));
+            chartGraftemp.draw(dataGrafTemp, optionsGrafTemp);
+        }
+
+        function drawGrafUmi() {
+            // Desenha Gráfico de Linhas
+            dataGrafUmi = new google.visualization.DataTable();
+            dataGrafUmi.addColumn('datetime', 'Hora');
+            dataGrafUmi.addColumn('number', 'VP');
+            dataGrafUmi.addColumn('number', 'SP');
+
+            optionsGrafUmi = {
+                title: 'Umidade tempo real',
+                pointSize: 2,
+                legend: {
+                    position: 'rigth'
+                },
+
+                curveType: 'function',
+                hAxis: {
+                    title: 'Horário',
+                    format: 'HH:mm:ss',
+                    gridlines: {
+                        count: 5
+                    }
+                },
+                vAxis: {
+                    title: 'Umidade',
+                    format: 'long',
+                    gridlines: {
+                        count: 7
+                    },
+                    viewWindow: {
+                        min: 0,
+                        max: 100
+                    }
+                }
+            };
+          ///  dataGrafUmi.addRows([[new Date(),
+           //    0,
+           //   0
+           // ]]);
+
+            chartGrafUmi = new google.visualization.LineChart(document.getElementById('GrafUmi'));
+            chartGrafUmi.draw(dataGrafUmi, optionsGrafUmi);
+        }
+
+
+        function drawGrafMedia() {
+            // Desenha Gráfico de Linhas
+            dataGrafMedia = new google.visualization.DataTable();
+            dataGrafMedia.addColumn('datetime', 'Hora');
+            dataGrafMedia.addColumn('number', 'VPT');
+            dataGrafMedia.addColumn('number', 'VPU');
+            dataGrafMedia.addColumn('number', 'SPT');
+            dataGrafMedia.addColumn('number', 'SPU');
+
+
+         
+            optionsGrafMedia = {
+                
+                title: 'Histórico umidade x Temperatura',
+                pointSize: 0,
+                
+
+                legend: {
+                    position: 'rigth'
+                    
+                },
+              
+
+                curveType: 'function',
+                curveColor: '#00000',
+       
+              
+                hAxis: {
+
+                    format: ' ',
+
+                    gridlines: {
+                        count:20
+                    }
+                   
+                },
+                vAxis: {
+                    title: 'Umidade x Temperatura',
+                    format: 'long',
+
+                    textStyle: {
+                        color:'#0000ff'
+
+                        
+                    },
+
+                    gridlines: {
+                        count: 5
+                    },
+
+                    viewWindow: {
+                        min: 0,
+                        max:100
+                    }
+                }
+            };
+          
+
+            chartGrafMedia = new google.visualization.LineChart(document.getElementById('GrafMedia'));
+            chartGrafMedia.draw(dataGrafMedia, optionsGrafMedia);
+        }
+
+
+    </script>
+
+
+
+
+</head>
+
+<body onload="MQTTConnect()">
+
+
+    <div class="cabecalho">SENSORES EM CAMPO</div>
+
+
+    <div id="visor">
+
+
+
+
+
+        <div class="linhasensor">
+
+            <div class="Gauss">
+                <div id="temp" style="width:200px; height: 200px;"></div>
+            </div>
+
+            <div class="Grafico">
+
+                <div id="GrafTemp" style="width: 800px; height: 200px; border: 3px solid #ffd800; border-radius: 10px; "></div>
+
+
+                <div class="botoessetpoint">
+
+                    <button class="button" style="width:50px; height:45px;" onclick="EventoTempsubir()"><b> +</b></button>
+                    <button class="button" style="width:50px; height:45px;" onclick="EventoTempdescer()"><b> -</b></button>
+
+                </div>
+
+                <div id="atividade" style=" width:10px; height: 10px"></div>
+            </div>
+
+        </div>
+
+
+
+        <div class="linhasensor">
+
+            <div class="Gauss">
+
+                <div id="umi" style="width: 200px; height: 200px;"></div>
+            </div>
+
+            <div class="Grafico">
+
+                <div id="GrafUmi" style="width: 800px; height: 200px; border: 3px solid #ffd800; border-radius: 10px;"></div>
+
+                <div class="botoessetpoint">
+
+                    <button class="button" style="width:50px; height:45px;" onclick="EventoUmisubir()"><b> +</b></button>
+                    <button class="button" style="width:50px; height:45px;" onclick="EventoUmidescer()"><b> -</b></button>
+
+                </div>
+                <div id="atividade2" style=" width:10px; height: 10px"></div>
+               
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="botoescomando">
+
+            <button class="btn" style="width: 200px; height: 30px; " onclick="enviapacote()"><b>Teste</b></button>
+            <button onclick="Historico()" class="btn" style="width: 200px; height: 30px"><b>Histórico</b> </button>
+            <button onclick="" class="btn" style="width: 200px; height: 30px"><b>Acão</b> </button>
+
+        </div>
+
+
+
+
+
+        <div id="modal-container" class="modal-container">
+            <div class="modal">
+                <button class="fechar" id="fechar">X</button>
+                <h1>ALERTA!!</h1>
+                <p>PARAMETROS ACIMA DO SETPOINT</p>
+            </div>
+        </div>
+
+
+        <div id="modal-Historico" class="modal-Historico">
+
+            <div class="Historico">
+                <button class="fechar" id="fecharB">X</button>
+                <h1>veja historico</h1>
+                <div id="GrafMedia" style="width: 90%; height: 90%; border: 3px solid #ffd800; border-radius: 10px;"></div>
+               
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+
+    <div class="rodape">Produzido Por @Joabe</div>
+
+
+
+
+</body>
+</html>
